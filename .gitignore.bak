@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+/dist/
+=======
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -10,12 +13,4 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-
-#netbeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+>>>>>>> 579115c461d2bcf85f532f577176af56b17d2993
