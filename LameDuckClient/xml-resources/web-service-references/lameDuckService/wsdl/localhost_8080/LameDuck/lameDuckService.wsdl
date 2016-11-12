@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown. --><definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuck/data/lameDuck" xmlns:ns0="http://xml.netbeans.org/schema/hotel" xmlns:ns1="http://xml.netbeans.org/schema/hotel" xmlns:ns2="http://xml.netbeans.org/schema/hotel" xmlns:ns3="http://xml.netbeans.org/schema/hotel" xmlns:ns4="http://xml.netbeans.org/schema/hotel" xmlns:ns5="http://types.fastmoney.imm.dtu.dk" xmlns:ns6="http://xml.netbeans.org/schema/hotel" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="lameDuck" targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuck/data/lameDuck">
+    <types>
+        <xsd:schema xmlns:ns8="http://xml.netbeans.org/schema/hotel" xmlns:ns9="http://xml.netbeans.org/schema/hotel" xmlns:ns7="http://xml.netbeans.org/schema/hotel" xmlns:ns10="http://xml.netbeans.org/schema/creditCardFaults" xmlns:ns15="http://xml.netbeans.org/schema/test" xmlns:ns11="http://xml.netbeans.org/schema/bookingFaults" targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuck/data/lameDuck">
+            <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
+            <xsd:import namespace="http://xml.netbeans.org/schema/hotel" schemaLocation="http://localhost:8080/LameDuck/lameDuckService?xsd=3"/>
+            <xsd:import namespace="http://xml.netbeans.org/schema/creditCardFaults" schemaLocation="http://localhost:8080/LameDuck/lameDuckService?xsd=2"/>
+            <xsd:import namespace="http://xml.netbeans.org/schema/bookingFaults" schemaLocation="http://localhost:8080/LameDuck/lameDuckService?xsd=1"/>
+            <xsd:complexType name="BookingQuerryT">
+                <xsd:sequence>
+                    <xsd:element name="city" type="xsd:string"/>
+                    <xsd:element name="arrivalDate" type="xsd:date"/>
+                    <xsd:element name="departureDate" type="xsd:date"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="BookingRequestT">
+                <xsd:sequence>
+                    <xsd:element name="bookingNumber" type="xsd:string"/>
+                    <xsd:element name="newElement" type="ns5:creditCardInfoType" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getHotelsReq" type="tns:BookingQuerryT"/>
+            <xsd:element name="getHotelsRsp" type="ns8:ReservationListT"/>
+            <xsd:element name="bookHotelReq" type="tns:BookingRequestT"/>
+            <xsd:element name="bookHotelRsp" type="ns8:ReservationListT"/>
+            <xsd:element name="cancelHotelReq" type="xsd:string"/>
+            <xsd:element name="cancelHotelRsp" type="xsd:boolean"/>
+            <xsd:element name="cardNotFound" type="ns10:CreditCardNotValidFault"/>
+            <xsd:element name="insufficientFounds" type="ns10:InsufficientFundsFault"/>
+            <xsd:element name="bookingNotFound" type="ns11:BookingNumberNotFoundFault"/>
+            <xsd:element name="itineraryStarted" type="ns11:ItineraryStartedFault"/>
+        </xsd:schema>
+    </types>
+    <message name="lameDuckOperationRequest">
+        <part name="in" element="tns:getHotelsReq"/>
+    </message>
+    <message name="lameDuckOperationResponse">
+        <part name="out" element="tns:getHotelsRsp"/>
+    </message>
+    <message name="lameDuckOperation1Request">
+        <part name="in" element="tns:bookHotelReq"/>
+    </message>
+    <message name="lameDuckOperation1Response">
+        <part name="out" element="tns:bookHotelRsp"/>
+    </message>
+    <message name="lameDuckOperationRequest1">
+        <part name="in" element="tns:cancelHotelReq"/>
+    </message>
+    <message name="lameDuckOperationResponse1">
+        <part name="out" element="tns:cancelHotelRsp"/>
+    </message>
+    <message name="bookingNotFound">
+        <part name="fault" element="tns:bookingNotFound"/>
+    </message>
+    <message name="itineraryStarted">
+        <part name="fault" element="tns:itineraryStarted"/>
+    </message>
+    <message name="cardNotFound">
+        <part name="fault" element="tns:cardNotFound"/>
+    </message>
+    <message name="insufficientFounds">
+        <part name="fault" element="tns:insufficientFounds"/>
+    </message>
+    <portType name="lameDuckPortType">
+        <operation name="getHotels">
+            <input name="input1" message="tns:lameDuckOperationRequest"/>
+            <output name="output1" message="tns:lameDuckOperationResponse"/>
+        </operation>
+        <operation name="bookHotel">
+            <input name="input3" message="tns:lameDuckOperation1Request"/>
+            <output name="output3" message="tns:lameDuckOperation1Response"/>
+            <fault name="fault1" message="tns:cardNotFound"/>
+            <fault name="fault2" message="tns:insufficientFounds"/>
+        </operation>
+        <operation name="cancelHotel">
+            <input name="input2" message="tns:lameDuckOperationRequest1"/>
+            <output name="output2" message="tns:lameDuckOperationResponse1"/>
+            <fault name="fault1" message="tns:bookingNotFound"/>
+            <fault name="fault2" message="tns:itineraryStarted"/>
+        </operation>
+    </portType>
+    <binding name="lameDuckPortTypeBinding" type="tns:lameDuckPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getHotels">
+            <soap:operation/>
+            <input name="input1">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output1">
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="bookHotel">
+            <soap:operation/>
+            <input name="input3">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output3">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="fault1">
+                <soap:fault name="fault1" use="literal"/>
+            </fault>
+            <fault name="fault2">
+                <soap:fault name="fault2" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="cancelHotel">
+            <soap:operation/>
+            <input name="input2">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output2">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="fault1">
+                <soap:fault name="fault1" use="literal"/>
+            </fault>
+            <fault name="fault2">
+                <soap:fault name="fault2" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="lameDuckService">
+        <port name="lameDuckPortTypeBindingPort" binding="tns:lameDuckPortTypeBinding">
+            <soap:address location="http://localhost:8080/LameDuck/lameDuckService"/>
+        </port>
+    </service>
+</definitions>

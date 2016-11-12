@@ -19,3 +19,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/LameDuck/nbproject/private/
+/LameDuckClient/nbproject/private/
