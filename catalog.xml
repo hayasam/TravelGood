@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" uri="src/java/fastmoney.imm.dtu.dk_8080/BankServiceTypes.xsd"/>
     <nextCatalog catalog="nbproject/private/retriever/catalog.xml"/>
+    <system systemId="file:/M:/Documents/NetBeansProjects/LameDuck/src/java/data/lameDuck.wsdl" uri="src/conf/xml-resources/web-services/LameDuckWS/wsdl/lameDuck.wsdl"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" uri="src/conf/xml-resources/web-services/LameDuckWS/wsdl/fastmoney.imm.dtu.dk_8080/BankServiceTypes.xsd"/>
+    <system systemId="file:/M:/Documents/NetBeansProjects/LameDuck/src/java/data/hotel.xsd" uri="src/conf/xml-resources/web-services/LameDuckWS/wsdl/hotel.xsd"/>
+    <system systemId="file:/M:/Documents/NetBeansProjects/LameDuck/src/java/data/creditCardFaults.xsd" uri="src/conf/xml-resources/web-services/LameDuckWS/wsdl/creditCardFaults.xsd"/>
+    <system systemId="file:/M:/Documents/NetBeansProjects/LameDuck/src/java/data/bookingFaults.xsd" uri="src/conf/xml-resources/web-services/LameDuckWS/wsdl/bookingFaults.xsd"/>
 </catalog>
