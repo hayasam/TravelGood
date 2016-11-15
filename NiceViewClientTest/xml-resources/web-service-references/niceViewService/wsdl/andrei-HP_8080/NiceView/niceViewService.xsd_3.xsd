@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://xml.netbeans.org/schema/hotel" targetNamespace="http://xml.netbeans.org/schema/hotel" elementFormDefault="qualified">
+    <xsd:complexType name="AddressT">
+        <xsd:sequence>
+            <xsd:element name="street" type="xsd:string"/>
+            <xsd:element name="city" type="xsd:string"/>
+            <xsd:element name="country" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ReservationT">
+        <xsd:sequence>
+            <xsd:element name="hotelName" type="xsd:string"/>
+            <xsd:element name="bookingNumber" type="xsd:string"/>
+            <xsd:element name="reservationService" type="xsd:string"/>
+            <xsd:element name="address" type="tns:AddressT"/>
+            <xsd:element name="price" type="xsd:double"/>
+            <xsd:element name="needGuarantee" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ReservationListT">
+        <xsd:sequence>
+            <xsd:element name="newElement" type="tns:ReservationT" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

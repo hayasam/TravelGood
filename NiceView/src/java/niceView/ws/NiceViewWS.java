@@ -21,7 +21,8 @@ public class NiceViewWS {
 
     public org.netbeans.xml.schema.hotel.ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound, org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds {
         //TODO implement this method
-        throw new UnsupportedOperationException("Not implemented yet.");
+        System.out.println("Totul bine aici. Merge NiceView");
+        return null;
     }
 
     public boolean cancelHotel(java.lang.String in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted, org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound {

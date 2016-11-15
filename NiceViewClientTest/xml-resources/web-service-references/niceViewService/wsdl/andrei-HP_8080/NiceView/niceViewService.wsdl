@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/NiceView/data/niceView" xmlns:ns0="http://xml.netbeans.org/schema/hotel" xmlns:ns1="http://xml.netbeans.org/schema/hotel" xmlns:ns2="http://xml.netbeans.org/schema/hotel" xmlns:ns3="http://xml.netbeans.org/schema/hotel" xmlns:ns4="http://xml.netbeans.org/schema/hotel" xmlns:ns5="http://types.fastmoney.imm.dtu.dk" xmlns:ns6="http://xml.netbeans.org/schema/hotel" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="niceView" targetNamespace="http://j2ee.netbeans.org/wsdl/NiceView/data/niceView">
+    <types>
+        <xsd:schema xmlns:ns8="http://xml.netbeans.org/schema/hotel" xmlns:ns9="http://xml.netbeans.org/schema/hotel" xmlns:ns7="http://xml.netbeans.org/schema/hotel" xmlns:ns10="http://xml.netbeans.org/schema/creditCardFaults" xmlns:ns15="http://xml.netbeans.org/schema/test" xmlns:ns11="http://xml.netbeans.org/schema/bookingFaults" targetNamespace="http://j2ee.netbeans.org/wsdl/NiceView/data/niceView">
+            <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
+            <xsd:import namespace="http://xml.netbeans.org/schema/hotel" schemaLocation="http://andrei-HP:8080/NiceView/niceViewService?xsd=3"/>
+            <xsd:import namespace="http://xml.netbeans.org/schema/creditCardFaults" schemaLocation="http://andrei-HP:8080/NiceView/niceViewService?xsd=2"/>
+            <xsd:import namespace="http://xml.netbeans.org/schema/bookingFaults" schemaLocation="http://andrei-HP:8080/NiceView/niceViewService?xsd=1"/>
+            <xsd:complexType name="BookingQuerryT">
+                <xsd:sequence>
+                    <xsd:element name="city" type="xsd:string"/>
+                    <xsd:element name="arrivalDate" type="xsd:date"/>
+                    <xsd:element name="departureDate" type="xsd:date"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="BookingRequestT">
+                <xsd:sequence>
+                    <xsd:element name="bookingNumber" type="xsd:string"/>
+                    <xsd:element name="newElement" type="ns5:creditCardInfoType" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getHotelsReq" type="tns:BookingQuerryT"/>
+            <xsd:element name="getHotelsRsp" type="ns8:ReservationListT"/>
+            <xsd:element name="bookHotelReq" type="tns:BookingRequestT"/>
+            <xsd:element name="bookHotelRsp" type="ns8:ReservationListT"/>
+            <xsd:element name="cancelHotelReq" type="xsd:string"/>
+            <xsd:element name="cancelHotelRsp" type="xsd:boolean"/>
+            <xsd:element name="cardNotFound" type="ns10:CreditCardNotValidFault"/>
+            <xsd:element name="insufficientFounds" type="ns10:InsufficientFundsFault"/>
+            <xsd:element name="bookingNotFound" type="ns11:BookingNumberNotFoundFault"/>
+            <xsd:element name="itineraryStarted" type="ns11:ItineraryStartedFault"/>
+        </xsd:schema>
+    </types>
+    <message name="niceViewGetHotelsRequest">
+        <part name="in" element="tns:getHotelsReq"/>
+    </message>
+    <message name="niceViewGetHotelsResponse">
+        <part name="out" element="tns:getHotelsRsp"/>
+    </message>
+    <message name="niceViewBookHotelRequest">
+        <part name="in" element="tns:bookHotelReq"/>
+    </message>
+    <message name="niceViewBookHotelResponse">
+        <part name="out" element="tns:bookHotelRsp"/>
+    </message>
+    <message name="niceViewCancelHotelRequest">
+        <part name="in" element="tns:cancelHotelReq"/>
+    </message>
+    <message name="niceViewCancelHotelResponse">
+        <part name="out" element="tns:cancelHotelRsp"/>
+    </message>
+    <message name="bookingNotFound">
+        <part name="fault" element="tns:bookingNotFound"/>
+    </message>
+    <message name="itineraryStarted">
+        <part name="fault" element="tns:itineraryStarted"/>
+    </message>
+    <message name="cardNotFound">
+        <part name="fault" element="tns:cardNotFound"/>
+    </message>
+    <message name="insufficientFounds">
+        <part name="fault" element="tns:insufficientFounds"/>
+    </message>
+    <portType name="niceViewPortType">
+        <operation name="getHotels">
+            <input name="input1" message="tns:niceViewGetHotelsRequest"/>
+            <output name="output1" message="tns:niceViewGetHotelsResponse"/>
+        </operation>
+        <operation name="bookHotel">
+            <input name="input3" message="tns:niceViewBookHotelRequest"/>
+            <output name="output3" message="tns:niceViewBookHotelResponse"/>
+            <fault name="fault1" message="tns:cardNotFound"/>
+            <fault name="fault2" message="tns:insufficientFounds"/>
+        </operation>
+        <operation name="cancelHotel">
+            <input name="input2" message="tns:niceViewCancelHotelRequest"/>
+            <output name="output2" message="tns:niceViewCancelHotelResponse"/>
+            <fault name="fault1" message="tns:bookingNotFound"/>
+            <fault name="fault2" message="tns:itineraryStarted"/>
+        </operation>
+    </portType>
+    <binding name="niceViewPortTypeBinding" type="tns:niceViewPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getHotels">
+            <soap:operation/>
+            <input name="input1">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output1">
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="bookHotel">
+            <soap:operation/>
+            <input name="input3">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output3">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="fault1">
+                <soap:fault name="fault1" use="literal"/>
+            </fault>
+            <fault name="fault2">
+                <soap:fault name="fault2" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="cancelHotel">
+            <soap:operation/>
+            <input name="input2">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output2">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="fault1">
+                <soap:fault name="fault1" use="literal"/>
+            </fault>
+            <fault name="fault2">
+                <soap:fault name="fault2" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="niceViewService">
+        <port name="niceViewPortTypeBindingPort" binding="tns:niceViewPortTypeBinding">
+            <soap:address location="http://andrei-HP:8080/NiceView/niceViewService"/>
+        </port>
+    </service>
+</definitions>

@@ -7,11 +7,11 @@ package niceViewClient.test;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import niceViewClient.CardNotFound;
-import niceViewClient.InsufficientFounds;
-import niceViewClient.ReservationListT;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds;
+import org.netbeans.xml.schema.hotel.ReservationListT;
 
 /**
  *
@@ -29,16 +29,16 @@ public class NiceViewClientTest {
     public void hello() {
         try {
             bookHotel(null);
-        } catch (CardNotFound ex) {
-            Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InsufficientFounds ex) {
+            Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CardNotFound ex) {
             Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static ReservationListT bookHotel(niceViewClient.BookingRequestT in) throws CardNotFound, InsufficientFounds {
-        niceViewClient.NiceViewService service = new niceViewClient.NiceViewService();
-        niceViewClient.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
+    private static ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws InsufficientFounds, CardNotFound {
+        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
+        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
         return port.bookHotel(in);
     }
 }
