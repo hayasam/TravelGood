@@ -10,10 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds;
 import org.netbeans.xml.schema.hotel.ReservationListT;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingQuerryT;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted;
 
 /**
  *
@@ -41,6 +43,20 @@ public class NiceViewClientTest {
         ReservationListT res = getHotels(bookingQuerry);
         System.out.println("---" + res.getNewElement().get(0).getHotelName());
     }
+    
+    @Test
+    public void testCancelHotel() {
+        try {
+            boolean result = cancelHotel("12345");
+            if(result) {
+                System.out.println("Cancellation ok");
+            } else System.out.println("Error");
+        } catch (BookingNotFound ex) {
+            Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ItineraryStarted ex) {
+            Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     private static ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws InsufficientFounds, CardNotFound {
         org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
@@ -52,5 +68,11 @@ public class NiceViewClientTest {
         org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
         org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
         return port.getHotels(in);
+    }
+
+    private static boolean cancelHotel(java.lang.String in) throws BookingNotFound, ItineraryStarted {
+        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
+        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
+        return port.cancelHotel(in);
     }
 }
