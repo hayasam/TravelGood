@@ -29,7 +29,7 @@ import org.netbeans.xml.schema.hotel.ReservationT;
 @WebService(serviceName = "niceViewService", portName = "niceViewPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/NiceView/data/niceView", wsdlLocation = "WEB-INF/wsdl/NiceViewWS/niceView.wsdl")
 public class NiceViewWS {
 
-    private Map<String, ReservationT> listOfReservations = new HashMap<>();
+    private Map<String, List<ReservationT>> listOfReservations = new HashMap<>();
     //private Map<String, Itinerary> reservationNumberToItinerary = new HashMap<String, Itinerary>();
     private List<Hotel> listOfHotels = new LinkedList<>();
     private Map<String, String> reservationNumberToPeopleMap = new HashMap<>();
@@ -66,6 +66,19 @@ public class NiceViewWS {
         
         return reservationList;
     }
+    
+    /**
+     * The bookHotel operation takes a booking number and credit card information (depending
+on whether a credit card guarantee is required or not) and books the hotel. If a guarantee is required, the
+operation validateCreditCard from the Bank service is called. The bookHotel operation returns true, if
+the booking was successful, and returns a fault (i.e., throws an exception) if the credit card information
+was not valid, there was not enough money on the client account, or if for other reasons the booking
+fails.
+     * @param in
+     * @return
+     * @throws org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound
+     * @throws org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds 
+     */
 
     public org.netbeans.xml.schema.hotel.ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound, org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds {
         
@@ -80,18 +93,41 @@ public class NiceViewWS {
 //                throw new ItineraryStarted("You can not cancel the hotel"
 //                        + " because your itinerary has already started.", new ItineraryStartedFault());
 //            }
-            System.out.println("The size of resList is " + listOfReservations.size() + " before cancelation.");
-            listOfReservations.remove(reservationNumberToPeopleMap.get(in));
-            reservationNumberToPeopleMap.remove(in);
+            System.out.println("The size of resList is " + listOfReservations.get(reservationNumberToPeopleMap.get(in)).size() + " before cancelation.");
+            //get the reservations list
+            List<ReservationT> aux = listOfReservations.get(reservationNumberToPeopleMap.get(in));
+            int removeIndex = 0;
+            for(ReservationT res: aux) {
+                //found the reservation to be removed
+                if(res.getBookingNumber().equals(in)) {
+                    break;
+                }
+                removeIndex++;
+            }
+            //remove the reservation
+            aux.remove(removeIndex);
+            listOfReservations.put(reservationNumberToPeopleMap.get(in), aux);
+            
             System.out.println("Reservation " + in +  " has been canceled.");
-            System.out.println("The size of resList is " + listOfReservations.size() + " after cancelation.");
+            System.out.println("The size of resList is " +
+                    listOfReservations.get(reservationNumberToPeopleMap.get(in)).size() + " after cancelation.");
+            reservationNumberToPeopleMap.remove(in);
             return true;
         } else throw new org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound("The booking"
                 + " with number " + in + " was not found.", new BookingNumberNotFoundFault());
     }
     
     private void addPersonToReservation(String name, ReservationT reservation) {
-        this.listOfReservations.put(name, reservation);
+        if(listOfReservations.containsKey(name)) {
+            List<ReservationT> r = this.listOfReservations.get(name);
+            r.add(reservation);
+            this.listOfReservations.put(name, r);
+        } else {
+            List<ReservationT> newList = new LinkedList<>();
+            newList.add(reservation);
+            listOfReservations.put(name, newList);
+        }
+        
     }
 
     private void initializeHotelsList() {
@@ -110,7 +146,10 @@ public class NiceViewWS {
         Hotel h = new Hotel("NiceHotel", address, availableFrom, availableTo, random.nextBoolean());
         this.listOfHotels.add(h);
         this.reservationNumberToPeopleMap.put("12345", "Andrei Suciu");
-        addPersonToReservation("Andrei Suciu", new ReservationT());
+        ReservationT r = new ReservationT();
+        r.setBookingNumber("12345");
+        addPersonToReservation("Andrei Suciu", r);
+        //this.listOfReservations = new HashMap<>();
 //        getCurrentTime().setDay(9);
 //        getCurrentTime().setMonth(10);
 //        getCurrentTime().setYear(2016);
