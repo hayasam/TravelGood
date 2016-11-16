@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/niceView.wsdl" uri="wsdl/niceView.wsdl"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankServiceTypes.xsd"/>
-    <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/hotel.xsd" uri="wsdl/hotel.xsd"/>
-    <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/creditCardFaults.xsd" uri="wsdl/creditCardFaults.xsd"/>
-    <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/bookingFaults.xsd" uri="wsdl/bookingFaults.xsd"/>
-</catalog>
