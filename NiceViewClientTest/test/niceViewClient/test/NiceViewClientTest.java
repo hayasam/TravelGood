@@ -57,11 +57,19 @@ public class NiceViewClientTest {
             Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private static ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws InsufficientFounds, CardNotFound {
-        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
-        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
-        return port.bookHotel(in);
+    
+    @Test
+    public void testBookHotel() {
+        try {
+            boolean res = bookHotel_1(null);
+            if(res) {
+                System.out.println("Merge++++++=");
+            }
+        } catch (CardNotFound ex) {
+            Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InsufficientFounds ex) {
+            Logger.getLogger(NiceViewClientTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private static ReservationListT getHotels(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingQuerryT in) {
@@ -74,5 +82,11 @@ public class NiceViewClientTest {
         org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
         org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
         return port.cancelHotel(in);
+    }
+
+    private static boolean bookHotel_1(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws CardNotFound, InsufficientFounds {
+        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService service = new org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewService();
+        org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType port = service.getNiceViewPortTypeBindingPort();
+        return port.bookHotel(in);
     }
 }

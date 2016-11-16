@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services>
-    <service name="NiceViewWS">
+    <service name="NewWebServiceFromWSDL">
       <implementation-class>niceView.ws.NiceViewWS</implementation-class>
       <wsdl-url>file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/niceView.wsdl</wsdl-url>
       <local-wsdl-file>niceView.wsdl</local-wsdl-file>

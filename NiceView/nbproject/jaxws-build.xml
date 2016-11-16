@@ -26,24 +26,24 @@
             <isset property="conf.dir"/>
         </condition>
     </target>
-    <target name="wsimport-service-NiceViewWS" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/service/NiceViewWS"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/service/NiceViewWS" destdir="${build.generated.dir}/jax-wsCache/service/NiceViewWS" wsdl="${basedir}/${conf-dir}xml-resources/web-services/NiceViewWS/wsdl/niceView.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" xnocompile="true" xendorsed="true">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-services/NiceViewWS/wsdl/niceView.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/service/NiceViewWS"/>
+    <target name="wsimport-service-NewWebServiceFromWSDL" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/service/NewWebServiceFromWSDL"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/service/NewWebServiceFromWSDL" destdir="${build.generated.dir}/jax-wsCache/service/NewWebServiceFromWSDL" wsdl="${basedir}/${conf-dir}xml-resources/web-services/NewWebServiceFromWSDL/wsdl/niceView.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-services/NewWebServiceFromWSDL/wsdl/niceView.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/service/NewWebServiceFromWSDL"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/service/NiceViewWS">
+            <fileset dir="${build.generated.dir}/jax-wsCache/service/NewWebServiceFromWSDL">
                 <include name="**/*.java"/>
             </fileset>
         </copy>
-        <copy todir="${build.web.dir}/WEB-INF/wsdl/NiceViewWS">
-            <fileset dir="${basedir}/${conf-dir}xml-resources/web-services/NiceViewWS/wsdl/"/>
+        <copy todir="${build.web.dir}/WEB-INF/wsdl/NewWebServiceFromWSDL">
+            <fileset dir="${basedir}/${conf-dir}xml-resources/web-services/NewWebServiceFromWSDL/wsdl/"/>
         </copy>
     </target>
-    <target name="wsimport-service-clean-NiceViewWS" depends="-init-project">
+    <target name="wsimport-service-clean-NewWebServiceFromWSDL" depends="-init-project">
         <delete dir="${build.generated.sources.dir}/jax-ws/org/netbeans/j2ee/wsdl/niceview/data/niceview"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/service/NiceViewWS"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/service/NewWebServiceFromWSDL"/>
     </target>
-    <target name="wsimport-service-generate" depends="wsimport-service-NiceViewWS"/>
+    <target name="wsimport-service-generate" depends="wsimport-service-NewWebServiceFromWSDL"/>
 </project>
