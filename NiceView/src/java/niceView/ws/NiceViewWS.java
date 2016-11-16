@@ -6,6 +6,11 @@
 package niceView.ws;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import dk.dtu.imm.fastmoney.BankService;
+import dk.dtu.imm.fastmoney.CreditCardFaultMessage;
+import dk.dtu.imm.fastmoney.CreditCardFaultType;
+import dk.dtu.imm.fastmoney.types.AccountType;
+import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,10 +20,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.WebServiceRef;
 import niceView.hotel.Hotel;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted;
 import org.netbeans.xml.schema.bookingfaults.BookingNumberNotFoundFault;
 import org.netbeans.xml.schema.bookingfaults.ItineraryStartedFault;
+import org.netbeans.xml.schema.creditcardfaults.InsufficientFundsFault;
 import org.netbeans.xml.schema.hotel.AddressT;
 import org.netbeans.xml.schema.hotel.ReservationListT;
 import org.netbeans.xml.schema.hotel.ReservationT;
@@ -28,6 +36,8 @@ import org.netbeans.xml.schema.hotel.ReservationT;
  */
 @WebService(serviceName = "niceViewService", portName = "niceViewPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.niceview.data.niceview.NiceViewPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/NiceView/data/niceView", wsdlLocation = "WEB-INF/wsdl/NiceViewWS/niceView.wsdl")
 public class NiceViewWS {
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl")
+    private BankService service;
 
     private Map<String, List<ReservationT>> listOfReservations = new HashMap<>();
     //private Map<String, Itinerary> reservationNumberToItinerary = new HashMap<String, Itinerary>();
@@ -80,9 +90,44 @@ fails.
      * @throws org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds 
      */
 
-    public boolean bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound, org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds {
-        
-        return true;
+    public boolean bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound, org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds, CreditCardFaultMessage {
+        String bookingNumber = in.getBookingNumber();
+        System.out.println("HOTEL CODE: " + bookingNumber);
+        CreditCardInfoType creditCard = in.getNewElement();
+        boolean res;
+        Hotel hotelToBook = null;
+        for(Hotel h:listOfHotels) {
+            
+            if(h.getBookingNumber().equals(bookingNumber)) {
+                hotelToBook = h;
+                System.out.println("BOOK NO FOR HOTEL " +h.getBookingNumber());
+            }
+        }
+        //do I need guarantee?
+        if(hotelToBook.isNeedGuarantee()) {
+            res = validateCreditCard(1, creditCard, hotelToBook.getPrice());
+            if(!res) {
+                throw new CreditCardFaultMessage("Validation failed", new CreditCardFaultType());
+            }
+            dk.dtu.imm.fastmoney.types.AccountType accType = new AccountType();
+            accType.setName(creditCard.getName());
+            accType.setNumber(creditCard.getNumber());
+            res = chargeCreditCard(1, creditCard, hotelToBook.getPrice(), accType);
+            if(!res) {
+                throw new InsufficientFounds("InsufficientFunds", new InsufficientFundsFault());
+            }
+
+        } else {
+            dk.dtu.imm.fastmoney.types.AccountType accType = new AccountType();
+            accType.setName(creditCard.getName());
+            accType.setNumber(creditCard.getNumber());
+            res = chargeCreditCard(1, creditCard, hotelToBook.getPrice(), accType);
+            if(!res) {
+                throw new InsufficientFounds("InsufficientFunds", new InsufficientFundsFault());
+            }
+        }
+        //I should check if the booking no is correct. I assume it is
+         return true;
     }
     
     public boolean cancelHotel(java.lang.String in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted, org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound {
@@ -126,8 +171,7 @@ fails.
             List<ReservationT> newList = new LinkedList<>();
             newList.add(reservation);
             listOfReservations.put(name, newList);
-        }
-        
+        }    
     }
 
     private void initializeHotelsList() {
@@ -143,7 +187,8 @@ fails.
         availableTo.setDay(10);
         availableTo.setMonth(12);
         availableTo.setYear(2016);
-        Hotel h = new Hotel("NiceHotel", address, availableFrom, availableTo, random.nextBoolean());
+        //make booking numbers for hotel. They are different form the booking for a reservation
+        Hotel h = new Hotel("NiceHotel", address, availableFrom, availableTo, random.nextBoolean(), "11", 100);
         this.listOfHotels.add(h);
         this.reservationNumberToPeopleMap.put("12345", "Andrei Suciu");
         ReservationT r = new ReservationT();
@@ -228,5 +273,26 @@ fails.
 //    public synchronized void  setCurrentTime(XMLGregorianCalendar currentTime) {
 //        this.currentTime = currentTime;
 //    }
+
+    private boolean chargeCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount, dk.dtu.imm.fastmoney.types.AccountType account) throws CreditCardFaultMessage {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
+        return port.chargeCreditCard(group, creditCardInfo, amount, account);
+    }
+
+    private boolean refundCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount, dk.dtu.imm.fastmoney.types.AccountType account) throws CreditCardFaultMessage {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
+        return port.refundCreditCard(group, creditCardInfo, amount, account);
+    }
+
+    private boolean validateCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount) throws CreditCardFaultMessage {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
+        return port.validateCreditCard(group, creditCardInfo, amount);
+    }
     
 }

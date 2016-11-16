@@ -6,6 +6,7 @@
 package niceViewClient.test;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds;
 import org.netbeans.xml.schema.hotel.ReservationListT;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingQuerryT;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT;
 import org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted;
 
 /**
@@ -61,7 +63,17 @@ public class NiceViewClientTest {
     @Test
     public void testBookHotel() {
         try {
-            boolean res = bookHotel_1(null);
+            BookingRequestT bookingRequest = new BookingRequestT();
+            bookingRequest.setBookingNumber("11");
+            CreditCardInfoType creditCard = new CreditCardInfoType();
+            creditCard.setName("Thor-Jensen Claus");
+            creditCard.setNumber("50408825");
+            CreditCardInfoType.ExpirationDate exp = new CreditCardInfoType.ExpirationDate();
+            exp.setMonth(5);
+            exp.setYear(9);
+            creditCard.setExpirationDate(exp);
+            bookingRequest.setNewElement(creditCard);
+            boolean res = bookHotel_1(bookingRequest);
             if(res) {
                 System.out.println("Merge++++++=");
             }

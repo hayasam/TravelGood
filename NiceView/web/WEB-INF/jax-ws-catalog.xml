@@ -10,8 +10,8 @@
     <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/hotel.xsd" uri="src/conf/xml-resources/web-services/NewWebServiceFromWSDL/wsdl/hotel.xsd"/>
     <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/creditCardFaults.xsd" uri="src/conf/xml-resources/web-services/NewWebServiceFromWSDL/wsdl/creditCardFaults.xsd"/>
     <system systemId="file:/home/andreisuciu/Documents/Git/TravelGood/NiceView/src/java/data/bookingFaults.xsd" uri="src/conf/xml-resources/web-services/NewWebServiceFromWSDL/wsdl/bookingFaults.xsd"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl=1" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl_1.wsdl"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=2" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_2.xsd"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl=1" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl_1.wsdl"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=2" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_2.xsd"/>
 </catalog>

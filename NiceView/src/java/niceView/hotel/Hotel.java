@@ -18,6 +18,8 @@ public class Hotel {
     private AddressT address;
     private XMLGregorianCalendarImpl availableFrom;
     private XMLGregorianCalendarImpl availableTo;
+    private String bookingNumber;
+    private int price;
     private boolean needGuarantee;
     
     public Hotel() {
@@ -26,12 +28,16 @@ public class Hotel {
     public Hotel(String name, AddressT address,
             XMLGregorianCalendarImpl availableFrom,
             XMLGregorianCalendarImpl availableTo,
-            boolean needGuarantee) {
+            boolean needGuarantee,
+            String bookingNumber,
+            int price) {
         this.name = name;
         this.address = address;
         this.availableFrom = availableFrom;
         this.availableTo = availableTo;
         this.needGuarantee = needGuarantee;
+        this.bookingNumber = bookingNumber;
+        this.price = price;
     }
 
     public String getName() {
@@ -72,6 +78,22 @@ public class Hotel {
 
     public void setNeedGuarantee(boolean needGuarantee) {
         this.needGuarantee = needGuarantee;
+    }
+
+    public String getBookingNumber() {
+        return bookingNumber;
+    }
+
+    public void setBookingNumber(String bookingNumber) {
+        this.bookingNumber = bookingNumber;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
     
 }
