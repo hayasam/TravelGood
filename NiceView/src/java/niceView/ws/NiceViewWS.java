@@ -11,8 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
+import javax.xml.datatype.XMLGregorianCalendar;
 import niceView.hotel.Hotel;
+import org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted;
+import org.netbeans.xml.schema.bookingfaults.BookingNumberNotFoundFault;
+import org.netbeans.xml.schema.bookingfaults.ItineraryStartedFault;
 import org.netbeans.xml.schema.hotel.AddressT;
 import org.netbeans.xml.schema.hotel.ReservationListT;
 import org.netbeans.xml.schema.hotel.ReservationT;
@@ -25,7 +31,9 @@ public class NiceViewWS {
 
     private Map<String, ReservationT> listOfReservations = new HashMap<>();
     private List<Hotel> listOfHotels = new LinkedList<>();
+    private Map<String, String> reservationNumberToPeopleMap = new HashMap<>();
     private Random random = new Random();
+    private XMLGregorianCalendar currentTime = new XMLGregorianCalendarImpl();
     
     /*Initial data*/
     {
@@ -60,14 +68,31 @@ public class NiceViewWS {
     }
 
     public org.netbeans.xml.schema.hotel.ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.CardNotFound, org.netbeans.j2ee.wsdl.niceview.data.niceview.InsufficientFounds {
-        //TODO implement this method
-        System.out.println("Totul bine aici. Merge NiceView");
+        
         return null;
     }
-
+    
+    /**
+     * The cancelHotel operation takes a booking number of a hotel reservation and cancels the
+hotel reservation. It throws an exception when for whatever reasons the cancelling of the hotel fails.
+     * @param in
+     * @return
+     * @throws org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted
+     * @throws org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound 
+     */
+    
     public boolean cancelHotel(java.lang.String in) throws org.netbeans.j2ee.wsdl.niceview.data.niceview.ItineraryStarted, org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound {
-        //TODO implement this method
-        throw new UnsupportedOperationException("Not implemented yet.");
+             
+        if(reservationNumberToPeopleMap.containsKey(in)) {
+            ReservationT reservation = listOfReservations.get(reservationNumberToPeopleMap.get(in));
+            if(isItineraryStarted(reservation)) {
+                throw new ItineraryStarted("You can not cancel the hotel"
+                        + " because your itinerary has already started.", new ItineraryStartedFault());
+            }
+            listOfReservations.remove(reservationNumberToPeopleMap.get(in));
+            return true;
+        } else throw new org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingNotFound("The booking"
+                + " with number " + in + " was not found.", new BookingNumberNotFoundFault());
     }
     
     private void addPersonToReservation(String name, ReservationT reservation) {
@@ -89,6 +114,11 @@ public class NiceViewWS {
         availableTo.setYear(2016);
         Hotel h = new Hotel("NiceHotel", address, availableFrom, availableTo, random.nextBoolean());
         this.listOfHotels.add(h);
+        this.reservationNumberToPeopleMap.put("12345", "Andrei Suciu");
+        this.currentTime.setDay(9);
+        this.currentTime.setMonth(10);
+        this.currentTime.setYear(2016);
+        updateCurrentTime();
     }
     
     private boolean matchesPeriod(XMLGregorianCalendarImpl arrivalDate,
@@ -113,5 +143,43 @@ public class NiceViewWS {
             result = true;
         }
         return result;
+    }
+    
+    private boolean isItineraryStarted(String reservationNumber) {
+        boolean result = false;
+        
+        ReservationT reservation = 
+        
+        return result;
+    }
+    
+    private void updateCurrentTime() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while(true) {
+                    if(currentTime.getDay() != 31) {
+                        //System.out.println(" --- " + currentTime.getDay());
+                        currentTime.setDay(currentTime.getDay() + 1);
+                    } else {
+                        currentTime.setDay(1);
+                        if(currentTime.getMonth()!= 12) {
+                            currentTime.setMonth(currentTime.getMonth() + 1);
+                        } else {
+                            currentTime.setMonth(1);
+                            currentTime.setYear(currentTime.getYear() + 1);
+                        }
+                    }
+                    
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(NiceViewWS.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    System.out.println("Day: " + currentTime.getDay() + " Month: " + currentTime.getMonth());
+                }
+            }
+        }).start();
     }
 }
