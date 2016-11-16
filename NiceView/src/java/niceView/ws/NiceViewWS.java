@@ -38,9 +38,12 @@ public class NiceViewWS {
         
         String city = in.getCity();
         XMLGregorianCalendarImpl arrivalDate = (XMLGregorianCalendarImpl) in.getArrivalDate();
+        System.out.println(arrivalDate.getDay());
         XMLGregorianCalendarImpl departureDate = (XMLGregorianCalendarImpl) in.getDepartureDate();
+        
         for(Hotel h:listOfHotels) {
-            if(city.equals(h.getName()) && matchesPeriod(arrivalDate, h.getAvailableFrom(), departureDate, h.getAvailableTo())) {
+            
+            if(city.equals(h.getAddress().getCity()) && matchesPeriod(arrivalDate, h.getAvailableFrom(), departureDate, h.getAvailableTo())) {
                 ReservationT reservation = new ReservationT();
                 reservation.setAddress(h.getAddress());
                 reservation.setBookingNumber(String.valueOf(random.nextInt(1000)));
@@ -49,6 +52,7 @@ public class NiceViewWS {
                 reservation.setPrice(random.nextDouble()*100);
                 reservation.setReservationService("All inclusive");
                 reservationList.getNewElement().add(reservation);
+
             }
         }
         
@@ -94,13 +98,17 @@ public class NiceViewWS {
         
         boolean result = false;
         
+        if(arrivalDate.getYear() < availableFrom.getYear()) {
+            return result;
+        }
+        
         if(arrivalDate.getYear() >= availableFrom.getYear() &&
                 departureDate.getYear() < availableTo.getYear()) {
             result = true;
-        } else if(arrivalDate.getMonth()>= availableFrom.getMonth()&&
+        } else if(arrivalDate.getMonth() >= availableFrom.getMonth()&&
                 departureDate.getMonth()< availableTo.getMonth()) {
             result = true;
-        } else if(arrivalDate.getDay()>= availableFrom.getDay() &&
+        } else if(arrivalDate.getDay() >= availableFrom.getDay() &&
                 departureDate.getDay() <= availableTo.getDay()) {
             result = true;
         }

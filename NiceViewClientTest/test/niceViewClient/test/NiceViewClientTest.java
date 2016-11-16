@@ -5,6 +5,7 @@
  */
 package niceViewClient.test;
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -25,8 +26,20 @@ public class NiceViewClientTest {
 
     @Test
     public void testGetHotels() {
-        
-        getHotels(null);
+        BookingQuerryT bookingQuerry = new BookingQuerryT();
+        XMLGregorianCalendarImpl arrival = new XMLGregorianCalendarImpl();
+        XMLGregorianCalendarImpl departure = new XMLGregorianCalendarImpl();
+        arrival.setDay(10);
+        arrival.setMonth(11);
+        arrival.setYear(2016);
+        departure.setDay(14);
+        departure.setMonth(11);
+        departure.setYear(2016);
+        bookingQuerry.setArrivalDate(arrival);
+        bookingQuerry.setDepartureDate(departure);
+        bookingQuerry.setCity("Copenhagen");
+        ReservationListT res = getHotels(bookingQuerry);
+        System.out.println("---" + res.getNewElement().get(0).getHotelName());
     }
 
     private static ReservationListT bookHotel(org.netbeans.j2ee.wsdl.niceview.data.niceview.BookingRequestT in) throws InsufficientFounds, CardNotFound {
